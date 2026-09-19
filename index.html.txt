@@ -1,0 +1,542 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>野梨电竞</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent;}
+body{
+  background: radial-gradient(circle at top, #1f2937 0%, #0b1020 45%, #05070f 100%);
+  color:#fff;
+  min-height:100vh;
+  padding-bottom:80px;
+  overflow-x:hidden;
+  position:relative;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 20% 20%,rgba(124,242,139,0.18),transparent 26%),
+  radial-gradient(circle at 80% 10%,rgba(56,189,248,0.14),transparent 28%),
+  radial-gradient(circle at 50% 90%,rgba(168,85,247,0.18),transparent 30%);
+  animation: bgMove 8s ease-in-out infinite alternate;
+}
+@keyframes bgMove{0%{transform:translate3d(0,0,0) scale(1);}100%{transform:translate3d(-1%,1%,0) scale(1.04);}}
+#particles{position:fixed;inset:0;pointer-events:none;z-index:30;}
+.particle{
+  position:absolute;width:8px;height:8px;border-radius:50%;
+  background:#7cf28b;box-shadow:0 0 12px #7cf28b,0 0 24px rgba(124,242,139,0.6);
+  animation:particleFly 0.9s ease-out forwards;
+}
+@keyframes particleFly{
+  0%{transform:translate(-50%,-50%) scale(1);opacity:1;}
+  100%{transform:translate(var(--tx),var(--ty)) scale(0.2);opacity:0;}
+}
+.start-modal-wrap{
+  position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:300;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.start-modal-box{
+  width:100%;max-width:360px;background:#111827;
+  border:1px solid rgba(124,242,139,0.4);border-radius:20px;padding:28px;
+}
+.start-title{font-size:22px;color:#7cf28b;text-align:center;margin-bottom:18px;font-weight:bold;}
+.start-desc{font-size:15px;color:#cfd6e4;text-align:center;margin-bottom:20px;}
+.modal-wrap{
+  position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-box{
+  width:100%;max-width:360px;background:#111827;
+  border:1px solid rgba(124,242,139,0.4);border-radius:20px;padding:28px;position:relative;
+  z-index:202;
+}
+.modal-close{
+  position:absolute;top:14px;right:16px;width:32px;height:32px;border-radius:50%;
+  border:1px solid rgba(255,255,255,0.2);background:#1f2937;color:#fff;font-size:20px;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-title{font-size:22px;color:#7cf28b;text-align:center;margin-bottom:18px;font-weight:bold;}
+.modal-text{font-size:15px;color:#cfd6e4;line-height:1.8;text-align:center;margin-bottom:16px;}
+.modal-wx{margin-top:12px;font-size:17px;color:#38bdf8;font-weight:bold;text-align:center;}
+.input-wrap{margin-top:16px;}
+.input-wrap label{display:block;color:#7cf28b;margin-bottom:6px;font-size:15px;}
+.input-wrap input,.input-wrap textarea{
+  width:100%;padding:12px;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(124,242,139,0.3);border-radius:12px;color:#fff;font-size:15px;
+}
+.page-btn{
+  width:100%;padding:14px;border-radius:14px;border:2px solid #7cf28b;
+  font-size:16px;font-weight:bold;background:linear-gradient(90deg,#22c55e,#7cf28b);
+  color:#0b1020;animation:rgbGlow 2.5s linear infinite;
+}
+.page{display:none;padding:24px 20px 30px;position:relative;z-index:2;}
+.page.active{display:block;}
+.back-btn{
+  display:flex;align-items:center;gap:6px;color:#7cf28b;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(124, 242, 139,0.3);
+  border-radius:12px;padding:8px 14px;margin-bottom:16px;width:fit-content;
+}
+.hero{
+  margin-top:10px;padding:22px 18px;border-radius:24px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));
+  border:1px solid rgba(255,255,255,0.08);
+}
+.hero-top-text{text-align:center;font-size:20px;color:#7cf28b;margin-bottom:12px;font-weight:bold;letter-spacing:2px;}
+.logo-row{display:flex;align-items:center;gap:14px;}
+.logo-icon{
+  width:54px;height:54px;border-radius:18px;
+  background:conic-gradient(from 140deg,#7cf28b,#38bdf8,#a855f7,#7cf28b);
+  padding:2px;animation:logoSpin 7s linear infinite;
+}
+.logo-icon-inner{
+  width:100%;height:100%;border-radius:17px;background:#0b1020;
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.logo-icon-inner::before{
+  content:"";position:absolute;width:30px;height:30px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#d5ffd7,#7cf28b 55%,#2f8f45);
+}
+@keyframes logoSpin{to{transform:rotate(360deg);}}
+h1{
+  font-size:28px;letter-spacing:2px;
+  background:linear-gradient(90deg,#7cf28b,#a7f3d0,#38bdf8);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.subtitle{margin-top:8px;font-size:13px;color:#9aa7bd;}
+.card{
+  margin-top:18px;padding:18px;border-radius:20px;
+  background:linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));
+  border:1px solid rgba(255,255,255,0.08);
+}
+.card-title{font-size:17px;color:#7cf28b;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.dot{width:10px;height:10px;border-radius:50%;background:radial-gradient(circle,#fff,#7cf28b 60%,#166534);box-shadow:0 0 10px #7cf28b;}
+p{font-size:15px;line-height:1.9;color:#cfd6e4;}
+@keyframes rgbGlow{
+  0%{box-shadow:0 0 12px #ff4444,0 0 24px #ff4444;border-color:#ff4444;}
+  25%{box-shadow:0 0 12px #44ff44,0 0 24px #44ff44;border-color:#44ff44;}
+  50%{box-shadow:0 0 12px #4444ff,0 0 24px #4444ff;border-color:#4444ff;}
+  75%{box-shadow:0 0 12px #ff44ff,0 0 24px #ff44ff;border-color:#ff44ff;}
+  100%{box-shadow:0 0 12px #ff4444,0 0 24px #ff4444;border-color:#ff4444;}
+}
+.two-btn-wrap{display:flex;gap:16px;margin-top:20px;}
+.mc-text-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+.mc-text-card{
+  border-radius:16px;border:1px solid rgba(255,255,255,0.08);
+  background:#1f2937;padding:20px 12px;text-align:center;color:#7cf28b;
+}
+.order-item{
+  border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);
+  background:linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));
+  margin-top:18px;cursor:pointer;
+}
+.order-text-block{width:100%;padding:24px;background:#1f2937;text-align:center;color:#7cf28b;font-size:18px;}
+.order-item-body{padding:16px;}
+.order-item-title{font-size:18px;color:#7cf28b;margin-bottom:8px;}
+.order-item-desc{font-size:14px;color:#cfd6e4;line-height:1.8;}
+.detail-text-block{
+  width:100%;padding:24px;border-radius:20px;border:1px solid rgba(255,255,255,0.08);
+  margin-bottom:18px;background:#1f2937;text-align:center;color:#7cf28b;font-size:18px;
+}
+.detail-title{font-size:22px;color:#7cf28b;margin-bottom:12px;}
+.detail-desc{font-size:15px;line-height:1.9;color:#cfd6e4;margin-bottom:14px;}
+.order-now-btn{
+  width:100%;padding:16px;border-radius:16px;border:2px solid #7cf28b;
+  background:linear-gradient(90deg,#22c55e,#7cf28b,#38bdf8);
+  background-size:200% 100%;color:#0b1020;font-size:17px;font-weight:800;
+  let<section class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-top-text">野梨电竞服务</div>
+    <div class="logo-row">
+      <div class="logo-icon"><div class="logo-icon-inner"></div></div>
+      <div>
+        <h1>野梨电竞</h1>
+        <div class="subtitle">YELI ESPORTS · 电竞服务</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>关于野梨电竞</div>
+    <p>野梨电竞是专注于《我的世界》的电竞服务平台，主打游戏陪玩、PVP对决、趣味代玩等多种游戏项目。</p>
+    <p>无论你是想要体验紧张刺激的PVP对战，还是希望找人陪伴轻松游玩生存与建造，在这里都可以找到合适的服务。</p>
+    <p>平台全部服务均由经过考核的MC玩家提供，保证游戏体验，尊重每一位用户，拒绝不文明游戏行为。</p>
+    <p>我们希望打造一个友好、纯粹的我的世界游戏社区，让每一位MC爱好者都能享受游戏带来的乐趣。</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>我们可以提供什么</div>
+    <p>🔥 PVP对战服务：经典铁套对决，感受原汁原味的MC格斗，胜者拥有专属福利。</p>
+    <p>🎮 娱乐陪玩服务：生存、建造、小游戏均可，轻松聊天，快乐游玩。</p>
+    <p>📝 玩家招募：如果你技术优秀或者擅长聊天，你也可以申请加入我们成为打手或者陪玩。</p>
+    <p>💬 友好交流环境：平台倡导文明游戏，禁止骂人、嘲讽等不良行为。</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>《我的世界》精彩介绍</div>
+    <div class="mc-text-grid">
+      <div class="mc-text-card">方块世界</div>
+      <div class="mc-text-card">生存冒险</div>
+      <div class="mc-text-card">PVP对决</div>
+      <div class="mc-text-card">建造探索</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>新用户指引</div>
+    <p>1. 点击底部导航栏【点单】，浏览平台提供的全部游戏服务项目。</p>
+    <p>2. 选择你感兴趣的项目，点击查看项目详情，确认项目规则与价格。</p>
+    <p>3. 点击立刻下单，根据弹窗提示添加平台微信完成对接。</p>
+    <p>4. 想要成为打手或者陪玩，可以点击【加入我们】查看岗位要求以及考核方式。</p>
+  </div>
+</section>
+<section class="page" id="page-order">
+  <div class="hero">
+    <h1>点单服务</h1>
+    <div class="subtitle">选择你想要的服务项目</div>
+  </div>
+  <div class="order-item" id="order1v1Card">
+    <div class="order-text-block">1v1 PVP 项目介绍</div>
+    <div class="order-item-body">
+      <div class="order-item-title">1v1 经典对决 <span style="color:#7cf28b">5.98元</span></div>
+      <div class="order-item-desc">铁套、铁剑、盾牌，经典物品对掏，赢了可获得双倍退款。</div>
+    </div>
+  </div>
+  <div class="order-item" id="order30PlayCard">
+    <div class="order-text-block">娱乐陪玩项目介绍</div>
+    <div class="order-item-body">
+      <div class="order-item-title">30分钟娱乐陪玩 <span style="color:#7cf28b">9.90元</span></div>
+      <div class="order-item-desc">陪你游玩我的世界，生存、建造、小游戏都可以，时长三十分钟，轻松娱乐。</div>
+    </div>
+  </div>
+  <div class="order-item" id="orderBugidaoCard">
+    <div class="order-text-block">布吉岛胜利一次项目介绍</div>
+    <div class="order-item-body">
+      <div class="order-item-title">布吉岛胜利一次 <span style="color:#7cf28b">3.00元</span></div>
+      <div class="order-item-desc">布吉岛模式，帮助你拿下一局胜利，享受对局取胜的快乐。</div>
+    </div>
+  </div>
+</section>
+<section class="page" id="page-order-1v1">
+  <button class="back-btn" id="backToOrder">← 返回</button>
+  <div class="hero">
+    <h1>1v1 经典对决</h1>
+    <div class="subtitle">经典铁套对掏｜5.98元</div>
+  </div>
+  <div class="card">
+    <div class="detail-text-block">1v1经典对决项目介绍</div>
+    <div class="detail-title">简介</div>
+    <div class="detail-desc">1V1 经典对掏，就是双方穿着铁套，背包内持有铁剑、盾牌等经典物品进行对决。这是最经典的 MC PVP 玩法之一，没有复杂道具，全看走位、格挡和攻击节奏。</div>
+    <div class="detail-title">规则</div>
+    <div class="detail-desc">双方使用铁套、铁剑、盾牌等经典物品进行单挑对决。<br>击败对方即可获胜。<br>获胜者可以获得双倍退款。</div>
+    <button class="order-now-btn" id="order1v1Btn">立刻下单</button>
+  </div>
+</section>
+<section class="page" id="page-order-30play">
+  <button class="back-btn" id="backToOrder2">← 返回</button>
+  <div class="hero">
+    <h1>30分钟娱乐陪玩</h1>
+    <div class="subtitle">轻松娱乐游玩｜9.90元</div>
+  </div>
+  <div class="card">
+    <div class="detail-text-block">30分钟娱乐陪玩介绍</div>
+    <div class="detail-title">简介</div>
+    <div class="detail-desc">陪你游玩我的世界，生存、建造、小游戏都可以，时长三十分钟，轻松娱乐。</div>
+    <div class="detail-title">说明</div>
+    <div class="detail-desc">专业游戏陪玩服务。</div>
+    <button class="order-now-btn" id="order30PlayBtn">立刻下单</button>
+  </div>
+</section>
+<section class="page" id="page-order-bugidao">
+  <button class="back-btn" id="backToOrder3">← 返回</button>
+  <div class="hero">
+    <h1>布吉岛胜利一次</h1>
+    <div class="subtitle">布吉岛对局取胜｜3.00元</div>
+  </div>
+  <div class="card">
+    <div class="detail-text-block">布吉岛胜利一次项目介绍</div>
+    <div class="detail-title">简介</div>
+    <div class="detail-desc">布吉岛模式代赢服务，打手协助你拿下完整一局布吉岛对局胜利，体验胜利的乐趣。</div>
+    <div class="detail-title">规则</div>
+    <div class="detail-desc">进行布吉岛模式对局，完成一局完整胜利。<br>服务结束即为订单完成。<br>请配合打手正常进行游戏。</div>
+    <button class="order-now-btn" id="orderBugidaoBtn">立刻下单</button>
+  </div>
+</section>
+<section class="page" id="page-join">
+  <div class="hero">
+    <h1>加入我们</h1>
+    <div class="subtitle">成为打手 / 陪玩，需要微信考核</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>打手要求</div>
+    <p>1. 熟练掌握我的世界PVP对战，走位、格挡、对战意识优秀。</p>
+    <p>2. 心态良好，不骂人，服从平台安排。</p>
+    <p>3. 时间稳定，可以正常接单。</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>陪玩要求</div>
+    <p>1. 熟悉我的世界各类玩法，生存、建造、小游戏均可。</p>
+    <p>2. 性格友善，善于聊天，服务态度好。</p>
+    <p>3. 时间充足，可以稳定接取陪玩订单。</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>加入流程</div>
+    <p>1. 阅读上面的岗位要求，确认自己符合条件。</p>
+    <p>2. 添加微信参加线上考核。</p>
+    <p>3. 考核通过之后正式进入平台，可以开始接单。</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>联系考核</div>
+    <p>想要申请打手或者陪玩，请添加微信进行考核。</p>
+    <p style="color:#7cf28b;font-size:18px;font-weight:bold;">微信号：yeli‑dianjing</p>
+  </div>
+</section>
+<section class="page" id="page-me">
+  <div class="hero">
+    <h1>我的主页</h1>
+    <div class="subtitle">个人资料设置</div>
+  </div>
+  <div class="card">
+    <div class="profile-top-row">
+      <div class="avatar-box" id="avatarBox">
+        <img id="avatarImg" src="" alt="头像">
+        <div class="avatar-upload">更换头像</div>
+        <input type="file" id="avatarFile" accept="image/*" style="display:none;">
+      </div>
+      <div class="name-side">
+        <div class="input-wrap" style="margin-top:0;">
+          <label>名称</label>
+          <input type="text" id="usernameInput" placeholder="输入你的昵称">
+        </div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-item">📦 我下订单数量：<span id="myOrderCount">0</span> 单</div>
+      <div class="stat-item">💰 累计消费：<span id="myTotalMoney">0.00</span> 元</div>
+    </div>
+    <div class="input-wrap">
+      <label>个人简介</label>
+      <textarea id="descInput" placeholder="在这里写你的个人简介"></textarea>
+    </div>
+  </div>
+</section>
+<nav class="bottom-nav">
+  <div class="nav-item active" data-target="page-home">
+    <div class="nav-icon icon-home"></div><span>首页</span>
+  </div>
+  <div class="nav-item" data-target="page-order">
+    <div class="nav-icon icon-order"></div><span>点单</span>
+  </div>
+  <div class="nav-item" data-target="page-join">
+    <div class="nav-icon icon-join"></div><span>加入我们</span>
+  </div>
+  <div class="nav-item" data-target="page-me">
+    <div class="nav-icon icon-me"></div><span>我的</span>
+  </div>
+</nav>
+<script>
+const AudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playClick(){
+  const osc = AudioCtx.createOscillator();
+  const gain = AudioCtx.createGain();
+  osc.type="square";osc.frequency.value=720;
+  gain.gain.setValueAtTime(0.08,AudioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,AudioCtx.currentTime+0.08);
+  osc.connect(gain);gain.connect(AudioCtx.destination);
+  osc.start();osc.stop(AudioCtx.currentTime+0.08);
+}
+function playNotify(){
+  const osc = AudioCtx.createOscillator();
+  const gain = AudioCtx.createGain();
+  osc.type="sine";osc.frequency.value=880;
+  gain.gain.setValueAtTime(0.12,AudioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,AudioCtx.currentTime+0.15);
+  osc.connect(gain);gain.connect(AudioCtx.destination);
+  osc.start();osc.stop(AudioCtx.currentTime+0.15);
+}
+const pages = document.querySelectorAll(".page");
+const navItems = document.querySelectorAll(".nav-item");
+const usernameInput = document.getElementById("usernameInput");
+const startModal = document.getElementById("startModal");
+const startNameInput = document.getElementById("startNameInput");
+const startConfirmBtn = document.getElementById("startConfirmBtn");
+const orderTipModal = document.getElementById("orderTipModal");
+const orderTipClose = document.getElementById("orderTipClose");
+const backToOrder = document.getElementById("backToOrder");
+const backToOrder2 = document.getElementById("backToOrder2");
+const backToOrder3 = document.getElementById("backToOrder3");
+const order1v1Card = document.getElementById("order1v1Card");
+const order30PlayCard = document.getElementById("order30PlayCard");
+const orderBugidaoCard = document.getElementById("orderBugidaoCard");
+const order1v1Btn = document.getElementById("order1v1Btn");
+const order30PlayBtn = document.getElementById("order30PlayBtn");
+const orderBugidaoBtn = document.getElementById("orderBugidaoBtn");
+const avatarBox = document.getElementById("avatarBox");
+const avatarFile = document.getElementById("avatarFile");
+const avatarImg = document.getElementById("avatarImg");
+const myOrderCountDom = document.getElementById("myOrderCount");
+const myTotalMoneyDom = document.getElementById("myTotalMoney");
+const descInput = document.getElementById("descInput");
+const SAVE_KEY = "yeli_save_data";
+let saveData = {
+  username:"",
+  avatar:"",
+  desc:"",
+  orderList:[],
+  hunterArr:[],
+  playArr:[]
+};
+function loadSave(){
+  const raw = localStorage.getItem(SAVE_KEY);
+  if(raw){
+    try{
+      saveData = JSON.parse(raw);
+    }catch(e){
+      saveData = {username:"",avatar:"",desc:"",orderList:[],hunterArr:[],playArr:[]};
+    }
+  }
+}
+function saveAll(){
+  localStorage.setItem(SAVE_KEY,JSON.stringify(saveData));
+}
+loadSave();
+const PRICE_MAP = {
+  "1v1经典对决":5.98,
+  "30分钟娱乐陪玩":9.90,
+  "布吉岛胜利一次":3.00
+};
+if(saveData.username !== ""){
+  startModal.style.display = "none";
+  usernameInput.value = saveData.username;
+  descInput.value = saveData.desc;
+  if(saveData.avatar){
+    avatarImg.src = saveData.avatar;
+  }
+}
+startConfirmBtn.addEventListener("click",()=>{
+  const name = startNameInput.value.trim();
+  if(name.length===0){
+    alert("请输入昵称");
+    return;
+  }
+  saveData.username = name;
+  usernameInput.value = name;
+  saveAll();
+  startModal.style.display = "none";
+  playNotify();
+  refreshMyStat();
+})
+usernameInput.addEventListener("input",()=>{
+  saveData.username = usernameInput.value.trim();
+  saveAll();
+  refreshMyStat();
+})
+descInput.addEventListener("input",()=>{
+  saveData.desc = descInput.value;
+  saveAll();
+})
+function switchPage(pageId){
+  playClick();
+  pages.forEach(p=>p.classList.remove("active"));
+  navItems.forEach(n=>n.classList.remove("active"));
+  document.getElementById(pageId).classList.add("active");
+  refreshMyStat();
+}
+function createParticle(e){
+  const x = e.clientX;
+  const y = e.clientY;
+  const colors = ['#7cf28b','#38bdf8','#a855f7','#ff6b72'];
+  for(let i=0;i<8;i++){
+    const d = document.createElement("div");
+    d.className="particle";
+    const tx = (Math.random()-0.5)*120;
+    const ty = (Math.random()-0.5)*120;
+    d.style.setProperty('--tx',tx+"px");
+    d.style.setProperty('--ty',ty+"px");
+    d.style.left = x+"px";
+    d.style.top = y+"px";
+    d.style.background = colors[Math.floor(Math.random()*colors.length)];
+    document.getElementById("particles").appendChild(d);
+    setTimeout(()=>d.remove(),900);
+  }
+}
+function openModal(el){playClick();el.style.display="flex";}
+function closeModal(el){el.style.display="none";}
+avatarBox.addEventListener("click",(e)=>{
+  playClick();
+  createParticle(e);
+  avatarFile.click();
+})
+avatarFile.addEventListener("change",(e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    saveData.avatar = ev.target.result;
+    avatarImg.src = saveData.avatar;
+    saveAll();
+  }
+  reader.readAsDataURL(file);
+  playNotify();
+})
+order1v1Card.addEventListener("click",(e)=>{
+  createParticle(e);
+  switchPage("page-order-1v1");
+})
+order30PlayCard.addEventListener("click",(e)=>{
+  createParticle(e);
+  switchPage("page-order-30play");
+})
+orderBugidaoCard.addEventListener("click",(e)=>{
+  createParticle(e);
+  switchPage("page-order-bugidao");
+})
+backToOrder.addEventListener("click",()=>switchPage("page-order"));
+backToOrder2.addEventListener("click",()=>switchPage("page-order"));
+backToOrder3.addEventListener("click",()=>switchPage("page-order"));
+function createNewOrder(projectName){
+  const uname = saveData.username || "匿名下单用户";
+  const price = PRICE_MAP[projectName];
+  const newOrder = {
+    orderId:Date.now(),
+    userName:uname,
+    projectName:projectName,
+    price:price
+  }
+  saveData.orderList.push(newOrder);
+  saveAll();
+  refreshMyStat();
+  playNotify();
+  openModal(orderTipModal);
+  alert(`下单成功！订单单号：${newOrder.orderId}｜项目：${projectName}｜金额：${price.toFixed(2)}元`);
+}
+order1v1Btn.addEventListener("click",(e)=>{
+  createParticle(e);
+  createNewOrder("1v1经典对决");
+})
+order30PlayBtn.addEventListener("click",(e)=>{
+  createParticle(e);
+  createNewOrder("30分钟娱乐陪玩");
+})
+orderBugidaoBtn.addEventListener("click",(e)=>{
+  createParticle(e);
+  createNewOrder("布吉岛胜利一次");
+})
+orderTipClose.addEventListener("click",()=>closeModal(orderTipModal));
+orderTipModal.addEventListener("click",e=>{if(e.target===orderTipModal) closeModal(orderTipModal);});
+function refreshMyStat(){
+  const meName = saveData.username || "匿名下单用户";
+  const myOrders = saveData.orderList.filter(o=>o.userName===meName);
+  const count = myOrders.length;
+  const total = myOrders.reduce((sum,o)=>sum+o.price,0);
+  myOrderCountDom.innerText = count;
+  myTotalMoneyDom.innerText = total.toFixed(2);
+}
+navItems.forEach(item=>{
+  item.addEventListener("click",(e)=>{
+    createParticle(e);
+    const targetId = item.dataset.target;
+    switchPage(targetId);
+  })
+})
+refreshMyStat();
+</script>
+</body>
+</html>
+
